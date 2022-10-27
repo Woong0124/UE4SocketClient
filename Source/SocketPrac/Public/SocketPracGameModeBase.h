@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "MySocket.h"
+#include "HAL/RunnableThread.h"
+#include "MultichannelTcpReceiver.h"
 #include "SocketPracGameModeBase.generated.h"
+
 
 /**
  * 
@@ -16,14 +19,26 @@ class SOCKETPRAC_API ASocketPracGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-	MySocket MySock;
+	MySocket* MySock;
 	bool SocketCheck;
 
 	DataStruct* MyDataStruct;
 
+	class AMyActor01* MyActorArr[10];
+
+	class MyRunnable* MyRun;
+	FTimerHandle SocketTimerHandle;
+
 	virtual void BeginPlay() override;
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	void MyProcess();
 
 	void MySpawnActor(DataStruct* DStruct);
+
+	void MyMoveActor(DataStruct* DStruct);
+
 };
